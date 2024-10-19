@@ -1,4 +1,4 @@
-# Abstract {#abstract .unnumbered}
+# Abstract
 
 In this paper, we propose a facial image enhancement pipeline
 specifically tailored for low-quality CCTV footage, which is frequently
