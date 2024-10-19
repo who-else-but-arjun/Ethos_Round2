@@ -173,12 +173,12 @@ Weights](https://github.com/KupynOrest/DeblurGANv2)
     to \[-1, 1\], which is the input range required by the generator
     (due to the tanh output activation).
 
--   **Image Post-processing:**After the generator outputs the deblurred
+-   **Image Post-processing:** After the generator outputs the deblurred
     image, The pixel values are rescaled from the \[-1, 1\] range back
     to \[0, 255\] for displaying or converting the image back to a
     format that can be saved (For eg: PNG or JPEG).
 
--   **Why Chosen:**DeblurGANv2 was chosen due to its ability to handle
+-   **Why Chosen:** DeblurGANv2 was chosen due to its ability to handle
     complex blurring patterns and its superior performance compared to
     traditional deblurring techniques. It stands out as an advanced
     model for image deblurring due to its GAN-based adversarial
@@ -189,7 +189,7 @@ Weights](https://github.com/KupynOrest/DeblurGANv2)
     blur-scenarios with minimal computational overhead made it an ideal
     choice for this pipeline.
 
-![Model Architecture](Model.png){#fig:sample_image width="100%"}
+![Model Architecture](Model.png)
 
 # Discussion
 
@@ -264,7 +264,7 @@ different but related task. In this implementation:
     -   After training, the model's weights were saved for future use in
         real-time face recognition.
 
-![Sample Output Images](Sample.png){#fig:sample_image width="80%"}
+![Sample Output Images](Sample.png)
 
 ##  Real-Time Face Recognition System
 
@@ -273,7 +273,7 @@ The live face recognition system works as follows:
 -   **Loading the Model:** The trained VGGFace model, along with the
     custom classification layer, is loaded from the saved weights.
 
--   **Live Video Stream:**A live camera feed captures real-time footage
+-   **Live Video Stream:** A live camera feed captures real-time footage
     of suspects.
 
 -   **Face Detection:** The OpenCV Haar Cascade Classifier is employed
@@ -306,7 +306,7 @@ The live face recognition system works as follows:
     pipelines, ensuring that the images are of sufficient quality for
     recognition.
 
--   **Real-Time Processing:**The system is optimized for real-time
+-   **Real-Time Processing:** The system is optimized for real-time
     performance, ensuring that each video frame is processed quickly
     without significant delays in face detection and recognition.
 
@@ -321,11 +321,11 @@ real-time. By leveraging transfer learning with the VGGFace model and
 image enhancement techniques, the system achieved high accuracy and
 efficiency in recognition.
 
--   **Recognition Accuracy:**The combination of the VGGFace model,
+-   **Recognition Accuracy:** The combination of the VGGFace model,
     transfer learning, and image enhancement allowed for accurate
     student identification even in challenging conditions.
 
--   **Efficient Processing:**The system handled real-time video frames
+-   **Efficient Processing:** The system handled real-time video frames
     smoothly, maintaining high performance in face detection and
     recognition.
 
