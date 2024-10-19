@@ -18,6 +18,8 @@ faced in security and surveillance.
 
 [Github link to the
 MVP](https://github.com/who-else-but-arjun/Ethos_Round2).
+[Drive link to the
+Weights](https://drive.google.com/drive/folders/1jJ3jcYPZE-fgxxHvT9lR5Q-vjiOeb0PT?usp=sharing).
 
 # Introduction
 
@@ -349,6 +351,7 @@ results efficiently. This same interface is also used in live
 video-streaming wherein the suspects are identified in a live-video feed
 through web-cam.
 
+![Dashboard](Dashboard_UI.png)
 # References {#references .unnumbered}
 
 -   Dong, C., Loy, C. C., He, K., & Tang, X. (2015). *Image
