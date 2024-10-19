@@ -352,7 +352,7 @@ video-streaming wherein the suspects are identified in a live-video feed
 through web-cam.
 
 ![Dashboard](Dashboard_UI.png)
-# References {#references .unnumbered}
+# References
 
 -   Dong, C., Loy, C. C., He, K., & Tang, X. (2015). *Image
     Super-Resolution Using Deep Convolutional Networks (SRCNN)*. IEEE
