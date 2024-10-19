@@ -46,7 +46,109 @@ motion blur, and low resolution. Specifically, this system will:
     extracted from video recordings using LIME.
 
 -   Restore clarity to motion-blurred images using DeblurGANv2.
+# Steps to run the code :
 
+## Table of Contents  
+- [Features](#features)  
+- [Project Structure](#project-structure)  
+- [Setup](#setup)  
+- [How to Run](#how-to-run)  
+- [Usage Guide](#usage-guide)  
+- [Models Used](#models-used)  
+
+## Features  
+- **Face Detection and Recognition** using VGGFace with ResNet50.
+- **Super-Resolution** enhancement using SRCNN.  
+- **Image Deblurring** using DeblurGANv2.  
+- **Interactive Dashboards** powered by **Streamlit** for real-time predictions on video or images.  
+- **LIME (Local Interpretable Model-Agnostic Explanations)** support for model interpretability.  
+- Supports **custom datasets** for face recognition training.
+
+---
+
+## Project Structure  
+```bash
+├── dashboard.py           # Dashboard for predictions
+├── live.py                # Live feed prediction dashboard
+├── pipeline.py            # Preprocessing and enhancements
+├── SRCNN.py               # Super-resolution model
+├── DeblurGANv2.py         # Deblurring model
+├── LIME.py                # LIME model for interpretability
+├── VGGFace.py             # VGG16 model with classification layers
+├── VGGFace_Resnet50.ipynb # Train face recognition model
+├── crop.py                # Face extraction from dataset
+├── layer_utils.py         # Custom layers for models
+├── requirements.txt       # Python dependencies
+└── README.md              # Project documentation (this file)
+```
+
+## Setup  
+
+### Prerequisites  
+Ensure you have **Python 3.11** and **TensorFlow 2.17** installed.  
+
+1. **Clone the repository:**  
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+
+2. **Download model weights** from the provided Google Drive link and place them in the appropriate locations within the project.
+
+---
+
+## How to Run  
+
+1. **Run the Streamlit Dashboard:**  
+   ```bash
+   streamlit run dashboard.py
+   ```  
+   This dashboard allows you to upload images or videos for face recognition and enhancement.
+
+2. **Run the Live Video Prediction Dashboard:**  
+   ```bash
+   streamlit run live.py
+   ```  
+   This version works with a **pre-recorded video** for predictions.
+---
+## Usage Guide  
+
+1. **Dataset Preparation:**  
+   Create folders in the following structure:  
+   ```bash
+   Dataset/{Name_of_suspect}/images.png
+   Headsets/{Name_of_suspect}/1.png
+   ```
+
+2. **Extract Faces from Dataset:**  
+   Run the `crop.py` file to extract faces from the dataset images and store them in the `Headsets` folder.  
+   ```bash
+   python crop.py
+   ```
+
+3. **Train the Face Recognition Model:**  
+   Use the `VGGFace_Resnet50.ipynb` notebook to train the model on your own dataset. Training will continue until the desired accuracy is achieved, and the weights will be saved for future use.  
+
+4. **Prediction on Dashboard:**  
+   - Upload an image or video on the **dashboard** to perform face recognition.  
+   - For **live predictions**, use `live.py` with a pre-recorded video.
+---
+
+## Models Used  
+
+1. **SRCNN** (`SRCNN.py`):  
+   - Used for **super-resolution** enhancement of images.  
+
+2. **DeblurGANv2** (`DeblurGANv2.py`):  
+   - Used for **deblurring** the images.  
+
+3. **LIME** (`LIME.py`):  
+   - Provides **model interpretability** by showing which features influence the predictions.
+
+4. **VGGFace** (`VGGFace.py`):  
+   - Uses **VGG16 architecture** for feature extraction and includes custom layers for face classification.
+
+---
 # Methodology
 
 ## Face Detection using OpenCV Haar Cascade Classifier
