@@ -1,3 +1,4 @@
+# Pipeline to process images through enhancement, super-resolution, and deblurring
 from matplotlib import pyplot as plt
 from DeblurGANv2 import deblur_image
 from SRCNN import enhance_images
