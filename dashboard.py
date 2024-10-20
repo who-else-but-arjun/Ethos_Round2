@@ -1,3 +1,5 @@
+# Streamlit Dashboard for Facial Reconstruction and Suspect Identification
+# Supports pre-recorded video upload and real-time face matching
 import os
 import streamlit as st
 import pandas as pd
@@ -16,13 +18,16 @@ logging.getLogger('tensorflow').setLevel(logging.ERROR)
 import warnings
 warnings.filterwarnings("ignore")
 
+# Load the pre-trained face classification model and class label mappings
 model = load_model('Trained_on_dataset.h5')
 with open('Class.json') as f:
     class_data = json.load(f)
 
+# Configure the Streamlit page layout
 st.set_page_config(page_title="Facial Reconstruction Dashboard", layout="wide")
 st.title("Facial Reconstruction Dashboard")
 
+# Return hardcoded suspect details for demonstration purposes
 def get_suspect_details():
     return {
         "Name": "Arjun Verma", 
@@ -30,9 +35,11 @@ def get_suspect_details():
         "Status": "ECE"
     }
 
+# Generate timestamped log messages for the terminal output panel
 def generate_logs():
     return f"[{time.strftime('%H:%M:%S')}] Processing video..."
 
+# Preprocess face image: resize to 224x224 and normalize pixel values
 def preprocess_image(image):  
     image = cv2.resize(image, (224, 224))  
     if len(image.shape) == 2: 
@@ -42,6 +49,7 @@ def preprocess_image(image):
     image = image / 255.0 
     return image
 
+# Process video frames to detect and identify suspect faces
 def process_video(video_path, suspect_name):
     found_faces = []
     cap = cv2.VideoCapture(video_path)
@@ -54,9 +62,11 @@ def process_video(video_path, suspect_name):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
 
+        # Process each detected face through the enhancement pipeline
         for (x, y, w, h) in faces:
             face = frame[y:y + h, x:x + w]
             processed_face = preprocess_image(face)
+            # Run through LIME, SRCNN, and DeblurGAN pipeline
             final = main(processed_face)
             if isinstance(final, np.ndarray):
                 final = final 
@@ -68,6 +78,7 @@ def process_video(video_path, suspect_name):
             final = cv2.resize(final, (224, 224))
             final = np.expand_dims(final, axis=0)
 
+            # Classify the enhanced face and get prediction confidence
             prediction = model.predict(final)
             confidence = np.max(prediction)
             class_id = np.argmax(prediction)
@@ -82,6 +93,7 @@ def process_video(video_path, suspect_name):
     cap.release()
     return None 
 
+# Create two-column layout: left for video, right for suspect details
 left_col, right_col = st.columns(2)
 found_face_info = None
 
