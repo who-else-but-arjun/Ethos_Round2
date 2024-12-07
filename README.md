@@ -389,7 +389,7 @@ The live face recognition system works as follows:
     -   **SRCNN:** Enhances the resolution of the detected faces,
         improving the clarity of low-resolution images.
 
-    -   **LIME:**Increases the illumination in poor-light image frames.
+    -   **LIME:** Increases the illumination in poor-light image frames.
 
     -   **DeblurGANv2:** Removes motion blur from images, ensuring the
         detected faces are sharp and suitable for recognition.
