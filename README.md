@@ -1,6 +1,6 @@
 # Abstract
 
-In this paper, we propose a facial image enhancement pipeline
+In this project, we propose a facial image enhancement pipeline
 specifically tailored for low-quality CCTV footage, which is frequently
 affected by issues such as poor lighting, low resolution, and motion
 blur. The proposed pipeline integrates four core components: face
