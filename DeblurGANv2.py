@@ -1,3 +1,5 @@
+# DeblurGANv2 - Image deblurring using a Generative Adversarial Network (GAN)
+# This module implements the generator architecture for deblurring images
 import os
 import numpy as np
 
@@ -15,16 +17,21 @@ logging.getLogger('tensorflow').setLevel(logging.ERROR)
 import warnings
 warnings.filterwarnings("ignore")
 
+# Model configuration parameters
 channel_rate = 64
+# Input image dimensions (height, width, channels)
 image_shape = (256, 256, 3)
 patch_shape = (channel_rate, channel_rate, 3)
 
+# Generator and discriminator filter counts
 ngf = 64
 ndf = 64
+# Number of input and output channels (RGB)
 input_nc = 3
 output_nc = 3
 input_shape_generator = (256, 256, input_nc)
 input_shape_discriminator = (256, 256, output_nc)
+# Number of residual blocks in the generator network
 n_blocks_gen = 18
 
 def generator_model():
@@ -36,6 +43,7 @@ def generator_model():
     x = InstanceNormalization()(x)
     x = Activation('relu')(x)
 
+    # Downsampling layers to reduce spatial dimensions
     n_downsampling = 2
     for i in range(n_downsampling):
         mult = 2**i
@@ -43,10 +51,12 @@ def generator_model():
         x = InstanceNormalization()(x) 
         x = Activation('relu')(x)
 
+    # Apply residual blocks for feature transformation
     mult = 2**n_downsampling
     for i in range(n_blocks_gen):
         x = res_block(x, ngf*mult, use_dropout=True)
 
+    # Upsampling layers to restore spatial dimensions
     for i in range(n_downsampling):
         mult = 2**(n_downsampling - i)
         x = UpSampling2D()(x)
@@ -54,6 +64,7 @@ def generator_model():
         x = InstanceNormalization()(x) 
         x = Activation('relu')(x)
 
+    # Final output layer with tanh activation to produce pixel values in [-1, 1]
     x = ReflectionPadding2D((3, 3))(x)
     x = Conv2D(filters=output_nc, kernel_size=(7, 7), padding='valid')(x)
     x = Activation('tanh')(x)
@@ -96,6 +107,7 @@ def deblur_image(image, weights_path='Weights_for_DeblurGANv2.h5'):
     result_image = postprocess_image(deblurred_image)
     return result_image
 
+# Entry point for standalone execution
 if __name__ == '__main__':
     input_folder = 'image'      
     output_folder = 'image_out'  
