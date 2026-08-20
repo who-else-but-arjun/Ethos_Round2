@@ -1,13 +1,9 @@
-# Utility functions for dataset loading and batch generation
-# Used during training to load face images and create data batches
 import os
 import cv2
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
-# Load all images from a directory structure where each subfolder is a class
-# Returns numpy arrays of images, labels, and the list of class names
 def load_images(dataset_dir, img_height, img_width):
     images = []
     labels = []
@@ -24,13 +20,11 @@ def load_images(dataset_dir, img_height, img_width):
                     img = cv2.resize(img, (img_width, img_height))
                     images.append(img)
                     labels.append(label)
-    # Convert lists to numpy arrays and normalize pixel values to [0, 1]
     images = np.array(images, dtype='float32') / 255.0
     labels = np.array(labels)
     
     return images, labels, class_names
     
-# Generator that yields batches of data for training in a continuous loop
 def batch_generator(X, Y, batch_size):
     n_samples = X.shape[0]
     while True:
