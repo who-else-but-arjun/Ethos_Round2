@@ -1,4 +1,3 @@
-# Face detection and cropping tool using OpenCV CascadeClassifier
 import cv2
 import os
 from pathlib import Path
