@@ -1,5 +1,3 @@
-# Live Webcam Dashboard for Real-time Facial Reconstruction and Identification
-# Uses the webcam feed to detect, enhance, and identify suspect faces
 import streamlit as st
 import cv2
 import time
@@ -9,7 +7,6 @@ from pipeline import main
 import json
 import pandas as pd
 
-# Load pre-trained classification model and class label mappings
 model = load_model('Trained_on_dataset.h5')
 with open('Class.json') as f:
     class_data = json.load(f)
@@ -17,13 +14,11 @@ with open('Class.json') as f:
 st.set_page_config(page_title="Facial Reconstruction Dashboard", layout="wide")
 st.title("Facial Reconstruction Dashboard")
 
-# Initialize session state variables for stream control and face detection results
 if 'streaming' not in st.session_state:
     st.session_state.streaming = False
 if 'found_face_info' not in st.session_state:
     st.session_state.found_face_info = None
 
-# Return hardcoded suspect details for demonstration
 def get_suspect_details():
     return {
         "Name": "Arjun Verma",
@@ -31,7 +26,6 @@ def get_suspect_details():
         "Status": "ECE",
     }
 
-# Preprocess face crop: resize and normalize for model input
 def preprocess_image(image):
     image = cv2.resize(image, (224, 224))
     if len(image.shape) == 2:
@@ -41,7 +35,6 @@ def preprocess_image(image):
     image = image / 255.0
     return image
 
-# Capture and process live webcam frames for face detection and identification
 def video_stream():
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
@@ -61,7 +54,6 @@ def video_stream():
             gray, scaleFactor=1.1, minNeighbors=5)
         face_detected = False
 
-        # Process each detected face through the enhancement pipeline
         for (x, y, w, h) in faces:
             face = frame[y:y + h, x:x + w]
             processed_face = preprocess_image(face)
@@ -78,7 +70,6 @@ def video_stream():
             final = cv2.resize(final, (224, 224))
             final = np.expand_dims(final, axis=0)
 
-            # Classify the enhanced face and extract prediction details
             prediction = model.predict(final)
             confidence = np.max(prediction)
             class_id = np.argmax(prediction)
@@ -87,7 +78,6 @@ def video_stream():
 
             st.session_state.found_face_info = (face, class_id, confidence)
 
-            # Draw bounding box around the detected face
             cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         frame_placeholder.image(frame_rgb, channels="RGB", use_column_width=True)
@@ -100,7 +90,6 @@ def video_stream():
 
     cap.release()
 
-# Create two-column layout: left for webcam, right for suspect info
 left_col, right_col = st.columns(2)
 
 with left_col:

@@ -1,6 +1,3 @@
-# SRCNN - Super-Resolution Convolutional Neural Network
-# Implements single image super-resolution using a three-layer CNN
-# Reference: Dong et al., "Image Super-Resolution Using Deep Convolutional Networks"
 import os
 from keras.models import Sequential
 from keras.layers import Conv2D
@@ -17,32 +14,29 @@ logging.getLogger('tensorflow').setLevel(logging.ERROR)
 import warnings
 warnings.filterwarnings("ignore")
 
-# Build the SRCNN model architecture and load pre-trained weights
 def build_model():
     SRCNN = Sequential()
     
-    # Patch extraction and representation layer (9x9 filters)
+    # First Conv Layer
     SRCNN.add(Conv2D(filters=128, kernel_size=(9, 9), kernel_initializer='glorot_uniform',
                      activation='relu', padding='valid', use_bias=True, input_shape=(None, None, 1)))
     
-    # Non-linear mapping layer (3x3 filters)
+    # Second Conv Layer
     SRCNN.add(Conv2D(filters=64, kernel_size=(3, 3), kernel_initializer='glorot_uniform',
                      activation='relu', padding='same', use_bias=True))
     
-    # Reconstruction layer - produces the final high-resolution output (5x5 filters)
+    # Third Conv Layer
     SRCNN.add(Conv2D(filters=1, kernel_size=(5, 5), kernel_initializer='glorot_uniform',
                      activation='linear', padding='valid', use_bias=True))
     
-    # Compile with Adam optimizer and MSE loss, then load pre-trained weights
+    # Compile Model
     adam = Adam(learning_rate=0.0001)
     SRCNN.compile(optimizer=adam, loss='mean_squared_error', metrics=['mean_squared_error'])
     SRCNN.load_weights('Weights_for_SRCNN.h5')
     
     return SRCNN
 
-# Preprocess input image: convert to grayscale and normalize to [0, 1]
 def preprocess_image(image):
-    # Remove batch dimension if present
     if len(image.shape) == 4 and image.shape[0] == 1:
         image = np.squeeze(image, axis=0)
     if image.dtype == np.float64:
@@ -59,14 +53,12 @@ def preprocess_image(image):
     img = np.expand_dims(image, axis=0) 
     return img
 
-# Convert model output back to displayable image format (uint8, 0-255)
 def postprocess_image(pred):
     pred = np.squeeze(pred)
     pred = np.clip(pred * 255.0, 0, 255).astype(np.uint8)
     
     return pred
 
-# Run the full SRCNN enhancement pipeline on an input image
 def enhance_images(image, model=build_model()):
     processed_img = preprocess_image(image)
     pred = model.predict(processed_img)
@@ -74,7 +66,6 @@ def enhance_images(image, model=build_model()):
     
     return enhanced_img
 
-# Entry point for standalone testing
 if __name__ == "__main__":
     srcnn_model = build_model()
     input_image = cv2.imread('path_to_image')

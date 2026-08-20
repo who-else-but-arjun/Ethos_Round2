@@ -1,6 +1,3 @@
-# LIME - Low-light Image Enhancement
-# Implements the LIME algorithm for enhancing underexposed images
-# Uses an iterative optimization approach to estimate the illumination map
 import os
 import numpy as np
 from scipy import fft
@@ -14,27 +11,21 @@ logging.getLogger('tensorflow').setLevel(logging.ERROR)
 import warnings
 warnings.filterwarnings("ignore")
 
-# Compute the first-order derivative matrix for gradient computation
 def firstOrderDerivative(n, k=1):
     return np.eye(n) * (-1) + np.eye(n, k=k)
 
-# Construct a Toeplitz matrix for the frequency domain solver
 def toeplitizMatrix(n, row):
     vecDD = np.zeros(n)
     vecDD[0], vecDD[1], vecDD[row], vecDD[-1], vecDD[-row] = 4, -1, -1, -1, -1
     return vecDD
 
-# Flatten matrix into a column-major vector for FFT-based solving
 def vectorize(matrix):
     return matrix.T.ravel()
 
-# Reshape vector back to matrix form (column-major order)
 def reshape(vector, row, col):
     return vector.reshape((row, col), order='F')
 
-# LIME class for low-light image enhancement using ADMM optimization
 class LIME:
-    # Initialize LIME with optimization hyperparameters
     def __init__(self, iterations=10, alpha=2, rho=2, gamma=0.7, strategy=2):
         self.iterations = iterations
         self.alpha = alpha
@@ -70,14 +61,12 @@ class LIME:
         G, Z = np.zeros((self.row * 2, self.col)), np.zeros((self.row * 2, self.col))
         u = 1
 
-        # ADMM optimization loop: alternating between T, G, and Z subproblems
         for _ in trange(self.iterations):
             T = self.__T_subproblem(G, Z, u)
             G = self.__G_subproblem(T, Z, u, self.W)
             Z = self.__Z_subproblem(T, G, Z, u)
             u = self.__u_subproblem(u)
 
-        # Apply gamma correction to the illumination map
         return T ** self.gamma
 
     def __T_subproblem(self, G, Z, u):
@@ -139,7 +128,6 @@ def enhance_image(img, output_path=None):
     # plt.show()
     return enhanced_img
 
-# Entry point for standalone execution
 if __name__ == '__main__':
     input_image = 'enhanced_face_112_79.png' 
     output_image = 'enhanced_image.png'
